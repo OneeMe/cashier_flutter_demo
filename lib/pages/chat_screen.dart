@@ -127,7 +127,6 @@ class _ChatScreenState extends State<ChatScreen> {
           children: <Widget>[
             Flexible(
               child: TextField(
-                // 这里设置你的 TextField 属性
                 decoration: InputDecoration.collapsed(hintText: '发送消息'),
               ),
             ),
@@ -135,7 +134,6 @@ class _ChatScreenState extends State<ChatScreen> {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-                // 在这里添加发送消息的方法
                 onPressed: () => {},
               ),
             ),

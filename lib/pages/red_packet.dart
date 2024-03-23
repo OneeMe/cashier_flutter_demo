@@ -4,6 +4,7 @@ import 'package:cashier_flutter_demo/logic/amount_validate.dart';
 import 'package:cashier_flutter_demo/model/global_state.dart';
 import 'package:cashier_flutter_demo/model/messages.dart';
 import 'package:cashier_flutter_demo/network/pay.dart';
+import 'package:cashier_flutter_demo/pages/bottom_sheet_cashier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -63,33 +64,14 @@ class _RedPacketState extends State<RedPacket> {
     if (validateResult.isNotEmpty) {
       return;
     }
-    EasyLoading.show(status: '支付中...');
-    PaymentResponse response = await pay(_amount);
-    EasyLoading.dismiss();
-    if (!mounted) {
-      return;
-    }
-    if (response.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('支付成功'),
-        ),
-      );
-      Provider.of<SharedState>(context, listen: false).addMessage(
-        RedPackageMessage(
-          sender: 'Me',
-          time: DateTime.now(),
-          redPacketContent: '¥$_amount',
-        ),
-      );
-      Navigator.of(context).pop();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('支付失败: ${response.errorMessage}'),
-        ),
-      );
-    }
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return BottomSheetCashier(
+          amount: _amount,
+        );
+      },
+    );
   }
 
   @override
