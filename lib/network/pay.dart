@@ -26,7 +26,8 @@ const baseUrl = 'https://wechat.qq.com';
 void setupNetwork(bool enableMock) {
   if (enableMock) {
     dio = Dio(BaseOptions(baseUrl: baseUrl));
-    final dioAdapter = DioAdapter(dio: dio, matcher: const UrlRequestMatcher());
+    final dioAdapter =
+        DioAdapter(dio: dio, matcher: const FullHttpRequestMatcher());
     setupMock(dioAdapter);
   } else {
     dio = Dio(BaseOptions(baseUrl: baseUrl));
@@ -36,11 +37,31 @@ void setupNetwork(bool enableMock) {
 const payPath = '/pay';
 
 Future<PaymentResponse> pay(String amount) async {
-  Response response = await dio.post(
-    payPath,
-    data: {
-      'amount': amount,
-    },
-  );
-  return PaymentResponse.fromJson(response.data);
+  Response response = await Future.any([
+    dio.post(
+      payPath,
+      data: {
+        'amount': amount,
+      },
+    ).catchError((e) {
+      return Response(
+          data: Map.from({
+            'errorMessage': '网络请求失败',
+            'success': false,
+          }),
+          requestOptions: RequestOptions(baseUrl: baseUrl));
+    }),
+    delayFor(3),
+  ]);
+  return PaymentResponse.fromJson(response.data.cast<String, dynamic>());
+}
+
+Future<Response<Map>> delayFor(int seconds) async {
+  await Future.delayed(Duration(seconds: seconds));
+  return Response(
+      data: Map<String, dynamic>.from({
+        'errorMessage': '网络请求失败',
+        'success': false,
+      }),
+      requestOptions: RequestOptions(baseUrl: baseUrl));
 }

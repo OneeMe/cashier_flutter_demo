@@ -12,14 +12,27 @@ void setupMock(DioAdapter adapter) {
       'amount': '100',
     },
   );
-  // adapter.onPost(
-  //   payPath,
-  //   (server) => server.reply(200, {
-  //     'errorMessage': '余额不足',
-  //     'success': false,
-  //   }),
-  //   data: {
-  //     'amount': '99',
-  //   },
-  // );
+  adapter.onPost(
+    payPath,
+    (server) => server.reply(200, {
+      'errorMessage': '余额不足',
+      'success': false,
+    }),
+    data: {
+      'amount': '99',
+    },
+  );
+  adapter.onPost(
+      payPath,
+      (server) => server.reply(
+            200,
+            {
+              'errorMessage': '余额不足',
+              'success': false,
+            },
+            delay: const Duration(seconds: 4),
+          ),
+      data: {
+        'amount': '101',
+      });
 }
