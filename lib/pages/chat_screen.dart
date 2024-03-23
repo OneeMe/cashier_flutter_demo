@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cashier_flutter_demo/component/red_packet.dart';
+import 'package:cashier_flutter_demo/model/messages.dart';
 import 'package:cashier_flutter_demo/pages/red_packet.dart';
+import 'package:cashier_flutter_demo/util/date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +32,17 @@ class _ChatScreenState extends State<ChatScreen> {
     IconModel(Icons.add, '收藏'),
   ];
 
+  List<Message> messages = [
+    Message(
+      sender: 'Alice',
+      content: 'Happy New Year!',
+      time: DateTime.now().subtract(Duration(minutes: 5)),
+      isRedPacket: true,
+      redPacketContent: 'Congratulations on receiving the red packet',
+    ),
+    // ... other messages
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +53,22 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: <Widget>[
           Expanded(
-            child: ListView(
-                // 这里将会放置消息的列表
+              child: ListView.builder(
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              final message = messages[index];
+              return ListTile(
+                trailing: CircleAvatar(
+                  child: Text(message.sender[
+                      0]), // Just an example using sender's first letter
                 ),
-          ),
+                title: message.isRedPacket
+                    ? RedPacketWidget(content: message.redPacketContent ?? '')
+                    : Text(message.content),
+                subtitle: Text(formatTime(message.time)),
+              );
+            },
+          )),
           Divider(height: 1.0),
           Container(
             // 在这里构建消息输入区域
