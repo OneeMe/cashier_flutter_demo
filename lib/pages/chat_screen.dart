@@ -2,12 +2,23 @@
 
 import 'package:cashier_flutter_demo/component/red_packet.dart';
 import 'package:cashier_flutter_demo/model/global_state.dart';
-import 'package:cashier_flutter_demo/model/messages.dart';
 import 'package:cashier_flutter_demo/pages/red_packet.dart';
 import 'package:cashier_flutter_demo/util/date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+
+final List<IconModel> iconsData = [
+  IconModel(Icons.access_alarm, '照片'),
+  IconModel(Icons.access_time, '拍照'),
+  IconModel(Icons.accessibility, '视频通话'),
+  IconModel(Icons.account_balance, '位置'),
+  IconModel(Icons.account_balance_wallet, '红包'),
+  IconModel(Icons.account_box, '转账'),
+  IconModel(Icons.account_circle, '语音输入'),
+  IconModel(Icons.add, '收藏'),
+];
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -23,16 +34,17 @@ class IconModel {
 
 class _ChatScreenState extends State<ChatScreen> {
   bool isShowAddons = false;
-  List<IconModel> iconsData = [
-    IconModel(Icons.access_alarm, '照片'),
-    IconModel(Icons.access_time, '拍照'),
-    IconModel(Icons.accessibility, '视频通话'),
-    IconModel(Icons.account_balance, '位置'),
-    IconModel(Icons.account_balance_wallet, '红包'),
-    IconModel(Icons.account_box, '转账'),
-    IconModel(Icons.account_circle, '语音输入'),
-    IconModel(Icons.add, '收藏'),
-  ];
+
+  // first enter the chat screen, load messages from cache
+  @override
+  void initState() {
+    super.initState();
+    final sharedState = Provider.of<SharedState>(context, listen: false);
+    EasyLoading.show(status: 'loading...');
+    sharedState.initMessages().then((_) {
+      EasyLoading.dismiss();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
