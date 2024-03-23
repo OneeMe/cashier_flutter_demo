@@ -4,12 +4,12 @@ import 'package:cashier_flutter_demo/network/pay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-class RedPackage extends StatefulWidget {
+class RedPacket extends StatefulWidget {
   @override
-  _RedPackageState createState() => _RedPackageState();
+  _RedPacketState createState() => _RedPacketState();
 }
 
-class _RedPackageState extends State<RedPackage> {
+class _RedPacketState extends State<RedPacket> {
   String _amount = '0';
 
   void _onKeyTapped(String value) {

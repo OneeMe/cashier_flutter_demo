@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cashier_flutter_demo/pages/red_package.dart';
+import 'package:cashier_flutter_demo/pages/red_packet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -73,7 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 Navigator.push(
                                     context,
                                     CupertinoModalPopupRoute(
-                                        builder: (context) => RedPackage()));
+                                        builder: (context) => RedPacket()));
                               }
                             },
                           ),
