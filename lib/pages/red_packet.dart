@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cashier_flutter_demo/logic/amount_validate.dart';
 import 'package:cashier_flutter_demo/model/global_state.dart';
 import 'package:cashier_flutter_demo/model/messages.dart';
 import 'package:cashier_flutter_demo/network/pay.dart';
@@ -18,30 +19,36 @@ class RedPacket extends StatefulWidget {
 
 class _RedPacketState extends State<RedPacket> {
   String _amount = '0';
+  String _tipMessage = '';
 
   void _onKeyTapped(String value) {
     setState(() {
-      if (value == 'clear') {
-        _amount = '0';
-      } else if (value == 'dot' && !_amount.contains('.')) {
+      _tipMessage = '';
+      if (value == '.' && !_amount.contains('.')) {
         _amount += '.';
       } else if (value == 'delete') {
         _amount =
             _amount.length > 1 ? _amount.substring(0, _amount.length - 1) : '0';
       } else {
+        if (int.tryParse(value) == null) {
+          return;
+        }
+        if (_amount.contains('.') && _amount.split('.').last.length == 2) {
+          return;
+        }
         _amount = _amount == '0' ? value : _amount + value;
       }
     });
   }
 
-  Widget _numberButton(String number, {String? label}) {
+  Widget _numberButton(String content, {String? label}) {
     return Expanded(
       child: InkWell(
-        onTap: () => _onKeyTapped(number),
+        onTap: () => _onKeyTapped(content),
         child: SizedBox(
           height: 80,
           child: Center(
-            child: label != null ? Text(label) : Text(number),
+            child: label != null ? Text(label) : Text(content),
           ),
         ),
       ),
@@ -49,6 +56,13 @@ class _RedPacketState extends State<RedPacket> {
   }
 
   void _onConfirm() async {
+    String validateResult = validateAmount(_amount);
+    setState(() {
+      _tipMessage = validateResult;
+    });
+    if (validateResult.isNotEmpty) {
+      return;
+    }
     EasyLoading.show(status: '支付中...');
     PaymentResponse response = await pay(_amount);
     EasyLoading.dismiss();
@@ -90,6 +104,16 @@ class _RedPacketState extends State<RedPacket> {
       ),
       body: Column(
         children: [
+          // Display the tip message
+          if (_tipMessage.isNotEmpty)
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              alignment: Alignment.center,
+              child: Text(
+                _tipMessage,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
           // Display the amount
           Expanded(
             child: Container(
