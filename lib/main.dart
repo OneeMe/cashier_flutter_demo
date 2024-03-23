@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => SharedState(),
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Cashier Demo',
         theme: ThemeData(
           // This is the theme of your application.
           //

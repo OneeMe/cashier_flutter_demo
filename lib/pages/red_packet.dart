@@ -8,8 +8,12 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 class RedPacket extends StatefulWidget {
+  const RedPacket({super.key});
+
   @override
-  _RedPacketState createState() => _RedPacketState();
+  _RedPacketState createState() {
+    return _RedPacketState();
+  }
 }
 
 class _RedPacketState extends State<RedPacket> {
@@ -58,10 +62,8 @@ class _RedPacketState extends State<RedPacket> {
         ),
       );
       Provider.of<SharedState>(context, listen: false).addMessage(
-        Message(
+        RedPackageMessage(
           sender: 'Me',
-          content: '发了一个红包',
-          isRedPacket: true,
           time: DateTime.now(),
           redPacketContent: '¥$_amount',
         ),
@@ -99,6 +101,7 @@ class _RedPacketState extends State<RedPacket> {
               ),
             ),
           ),
+          Text('99:余额不足，100:成功，101:超时，其他:失败'),
           // Numeric keypad
           Container(
             padding: EdgeInsets.all(16.0),
@@ -134,7 +137,7 @@ class _RedPacketState extends State<RedPacket> {
                 Expanded(
                   child: InkWell(
                     onTap: _onConfirm,
-                    child: Container(
+                    child: SizedBox(
                       height: 60,
                       child: Center(
                         child: Text(

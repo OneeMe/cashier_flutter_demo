@@ -68,9 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: Text(message.sender[
                       0]), // Just an example using sender's first letter
                 ),
-                title: message.isRedPacket
-                    ? RedPacketWidget(content: message.redPacketContent ?? '')
-                    : Text(message.content),
+                title: RedPacketWidget(content: message.redPacketContent),
                 subtitle: Text(formatTime(message.time)),
               );
             },
