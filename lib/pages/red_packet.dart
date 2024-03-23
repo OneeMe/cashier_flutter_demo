@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cashier_flutter_demo/model/global_state.dart';
 import 'package:cashier_flutter_demo/model/messages.dart';
 import 'package:cashier_flutter_demo/network/pay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
 
 class RedPacket extends StatefulWidget {
   @override
@@ -55,6 +57,16 @@ class _RedPacketState extends State<RedPacket> {
           content: Text('支付成功'),
         ),
       );
+      Provider.of<SharedState>(context, listen: false).addMessage(
+        Message(
+          sender: 'Me',
+          content: '发了一个红包',
+          isRedPacket: true,
+          time: DateTime.now(),
+          redPacketContent: '¥$_amount',
+        ),
+      );
+      Navigator.of(context).pop();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

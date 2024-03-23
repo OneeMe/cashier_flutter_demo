@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cashier_flutter_demo/component/red_packet.dart';
+import 'package:cashier_flutter_demo/model/global_state.dart';
 import 'package:cashier_flutter_demo/model/messages.dart';
 import 'package:cashier_flutter_demo/pages/red_packet.dart';
 import 'package:cashier_flutter_demo/util/date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -32,19 +34,11 @@ class _ChatScreenState extends State<ChatScreen> {
     IconModel(Icons.add, '收藏'),
   ];
 
-  List<Message> messages = [
-    Message(
-      sender: 'Alice',
-      content: 'Happy New Year!',
-      time: DateTime.now().subtract(Duration(minutes: 5)),
-      isRedPacket: true,
-      redPacketContent: 'Congratulations on receiving the red packet',
-    ),
-    // ... other messages
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final sharedState = Provider.of<SharedState>(context);
+    final messages = sharedState.messages;
+
     return Scaffold(
       appBar: AppBar(
         // 在这里添加 AppBar 的内容，例如返回按钮、标题等
