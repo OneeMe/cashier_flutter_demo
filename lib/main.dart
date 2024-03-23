@@ -1,7 +1,10 @@
-import 'package:cashier_flutter_demo/chat_screen.dart';
+import 'package:cashier_flutter_demo/network/pay.dart';
+import 'package:cashier_flutter_demo/pages/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
+  setupNetwork(true);
   runApp(const MyApp());
 }
 
@@ -33,6 +36,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      builder: EasyLoading.init(),
     );
   }
 }

@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cashier_flutter_demo/red_package.dart';
+import 'package:cashier_flutter_demo/pages/red_package.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: _buildTextComposer(),
           ),
           if (isShowAddons)
-            Container(
+            SizedBox(
                 height: 200,
                 child: GridView.count(
                   crossAxisCount: 4,

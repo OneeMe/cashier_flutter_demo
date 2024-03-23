@@ -1,5 +1,8 @@
-// a page for send red package
+// ignore_for_file: prefer_const_constructors
+
+import 'package:cashier_flutter_demo/network/pay.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class RedPackage extends StatefulWidget {
   @override
@@ -28,7 +31,7 @@ class _RedPackageState extends State<RedPackage> {
     return Expanded(
       child: InkWell(
         onTap: () => _onKeyTapped(number),
-        child: Container(
+        child: SizedBox(
           height: 80,
           child: Center(
             child: label != null ? Text(label) : Text(number),
@@ -36,6 +39,28 @@ class _RedPackageState extends State<RedPackage> {
         ),
       ),
     );
+  }
+
+  void _onConfirm() async {
+    EasyLoading.show(status: '支付中...');
+    PaymentResponse response = await pay(_amount);
+    EasyLoading.dismiss();
+    if (!mounted) {
+      return;
+    }
+    if (response.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('支付成功'),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('支付失败: ${response.errorMessage}'),
+        ),
+      );
+    }
   }
 
   @override
@@ -57,7 +82,7 @@ class _RedPackageState extends State<RedPackage> {
               alignment: Alignment.centerRight,
               child: Text(
                 '¥$_amount',
-                style: Theme.of(context).textTheme.headline3,
+                style: Theme.of(context).textTheme.displaySmall,
               ),
             ),
           ),
@@ -95,7 +120,7 @@ class _RedPackageState extends State<RedPackage> {
               children: [
                 Expanded(
                   child: InkWell(
-                    onTap: () {}, // Implement payment logic
+                    onTap: _onConfirm,
                     child: Container(
                       height: 60,
                       child: Center(
